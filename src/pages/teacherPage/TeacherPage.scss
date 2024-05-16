@@ -1,0 +1,17 @@
+.courses {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    margin: auto;
+    margin-top: 5%;
+
+    .courses__list {
+        list-style: none;
+        padding: 0;
+
+        .courses__list__li__header {
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ccc;
+        }
+    }
+}
