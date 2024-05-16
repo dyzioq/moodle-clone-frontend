@@ -1,17 +1,32 @@
 .courses {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     width: 80%;
+    padding: 10px;
     margin: auto;
     margin-top: 5%;
+}
 
-    .courses__list {
-        list-style: none;
-        padding: 0;
+.courses__list {
+    list-style: none;
+    padding: 0 20px 20px 20px;
+    margin: 0;
+}
 
-        .courses__list__li__header {
-            padding: 10px;
-            background-color: #f4f4f4;
-            border-bottom: 1px solid #ccc;
-        }
-    }
+.courses__list__li {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+.courses__list__li__header {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 30px;
+}
+
+.courses__list__li__content {
+    padding: 10px;
+    text-align: left;
 }
