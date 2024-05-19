@@ -1,9 +1,39 @@
 .courses {
+    background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 80%;
+    width: 70%;
     padding: 10px;
     margin: auto;
     margin-top: 5%;
+}
+
+.courses__header {
+    display: grid;
+    grid-template-columns: 30px 1fr 30px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+
+    h1 {
+        grid-area: 1 / 2;
+        margin: 0;
+    }
+}
+
+.courses__add {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    grid-area: 1 / 3;
+    align-self: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    p {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        line-height: 25px;
+    }
 }
 
 .courses__list {
@@ -14,19 +44,25 @@
 
 .courses__list__li {
     border: 1px solid #ddd;
-    border-radius: 10px;
+    border-radius: 10px 10px 5px 5px;
     margin: 20px;
 }
 
 .courses__list__li__header {
-    background-color: #f4f4f4;
+    background-color: #d78c3d;
+    overflow: hidden;
     padding: 10px;
     border-bottom: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 5px 5px 0 0;
     font-size: 30px;
+    color: white;
 }
 
 .courses__list__li__content {
-    padding: 10px;
+    padding: 20px;
     text-align: left;
+}
+
+.modal-add-course__header {
+    background-color: #d78c3d;
 }
