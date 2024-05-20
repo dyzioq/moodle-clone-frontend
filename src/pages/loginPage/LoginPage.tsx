@@ -15,13 +15,13 @@ export default function LoginPage() {
     // Dodaj logikę obsługi formularza tutaj
     console.log("Form submitted");
 
-    if (inputEmail !== "john@example.com") {
-      toast.error("Incorrect email or password!");
-    } else if (inputPassword !== "Polo1#") {
-      toast.error("Incorrect email or password!");
-    } else {
-      navigate("/student");
-    }
+    // if (inputEmail !== "john@example.com") {
+    //   toast.error("Incorrect email or password!");
+    // } else if (inputPassword !== "Polo1#") {
+    //   toast.error("Incorrect email or password!");
+    // } else {
+    //   navigate("/student");
+    // }
 
     try {
       const response = await fetch("https://localhost:7066/login", {
@@ -36,11 +36,13 @@ export default function LoginPage() {
       });
 
       if (!response.ok) {
+        toast.error("Email or password is incorrect");
         throw new Error("Network response was not ok");
       }
 
       const result = await response.json();
       console.log("Success:", result);
+      navigate("/student");
     } catch (error) {
       console.error("Error:", error);
     }

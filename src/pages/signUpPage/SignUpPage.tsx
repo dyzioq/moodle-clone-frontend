@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./SignUpPage.scss";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -22,11 +23,17 @@ export default function SignUpPage() {
         }),
       });
       console.log(response);
-      const data = await response.json();
+      //const data = await response.json();
 
-      return data;
+      if (!response.ok) {
+        toast.error("Email or password is incorrect");
+      } else {
+        navigate("/student");
+
+        //return data;
+      }
     } catch {
-      toast.error("Email or password is incorrect");
+      toast.error("Something went wrong");
     }
   }
 
