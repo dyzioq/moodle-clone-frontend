@@ -1,9 +1,8 @@
 import Header from "../../components/header/Header";
-import "./LoginPage.scss";
-//import "./LoginPage.css";
+import "./SignUpPage.scss";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -15,7 +14,7 @@ export default function LoginPage() {
   return (
     <>
       <div className="login-form">
-        <h1>Login</h1>
+        <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="username">Username</label>
@@ -25,10 +24,10 @@ export default function LoginPage() {
             <label htmlFor="password">Password</label>
             <input type="password" id="password" name="password" required />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit">Sign Up</button>
         </form>
-        <a href="" onClick={() => navigate("/signup")}>
-          Doesn't have an account? Sign Up!
+        <a href="" onClick={() => navigate("/")}>
+          Alredy have an account? Login!
         </a>
       </div>
       <button onClick={() => navigate("/student")}>Student</button>
