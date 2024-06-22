@@ -1,8 +1,7 @@
-
 import './TeacherPage.scss';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Modal, Form } from 'react-bootstrap';
 import Header from '../../components/header/Header';
 
 export default function TeacherPage() {
@@ -55,7 +54,7 @@ export default function TeacherPage() {
     <>
      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Add new course</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -72,7 +71,11 @@ export default function TeacherPage() {
               controlId="exampleForm.ControlTextarea1"
             >
               <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control 
+                as="textarea" 
+                rows={3} 
+                placeholder="Description"
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
