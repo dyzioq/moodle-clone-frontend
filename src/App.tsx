@@ -1,4 +1,5 @@
 import "./App.scss";
+// import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StudentPage from "./pages/studentPage/StudentPage.tsx";
 import TeacherPage from "./pages/teacherPage/TeacherPage.tsx";

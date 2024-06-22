@@ -16,7 +16,7 @@
   .login-form {
     margin: auto;
     margin-top: 10%;
-    background-color: #ec9f52;
+    background: rgba(236, 159, 82, 0.9);
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -54,17 +54,21 @@
     button {
         width: 100%;
         padding: 10px;
-        background-color: black;
-        border: none;
+        background-color: white;
+        border: 1px solid white;
         border-radius: 3px;
-        color: white;
+        margin-top: 10px;
+        color: black;
         font-size: 16px;
         cursor: pointer;
     }
 
     button:hover {
-        background-color: grey;
+      background: #efefef;
+      color: black;
     }
-    
-
+    button:active {
+      background: linear-gradient(90deg, #eee, rgba(255, 255, 255, 1) 50%);
+      color: black;
+    }
   }

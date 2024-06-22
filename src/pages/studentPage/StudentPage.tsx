@@ -5,12 +5,12 @@ import Header from '../../components/header/Header';
 export default function StudentPage() {
   const navigate = useNavigate();
 
-  async function getAllCourses() {
-    const response = await fetch('https://localhost:7066/api/Courses');
-    const data = await response.json();
-    console.log(data);
-    return data;
-  }
+  // async function getAllCourses() {
+  //   const response = await fetch('https://localhost:7066/api/Courses');
+  //   const data = await response.json();
+  //   console.log(data);
+  //   return data;
+  // }
 
   // async function getCourses(id : number) {
   //   const response = await fetch('https://localhost:7066/api/courses/id');
@@ -29,9 +29,10 @@ export default function StudentPage() {
       <div className="courses">
         <div className="courses__header"><h1>Courses</h1></div>
         <ul className="courses__list">
-          {list.map((el, index) => <li key={index} className='courses__list__li' onClick={() => navigate("/student/repo", {state: {index}})}>
-              <div className='courses__list__li__header'>{el.name}</div>
-              <div className='courses__list__li__content'>{el.description}</div>
+          {list.map((el, index) => 
+          <li key={index} className='course' onClick={() => navigate("/student/repo", {state: {index}})}>
+              <div className='course__header'><h2>{el.name}</h2></div>
+              <div className='course__content'>{el.description}</div>
             </li>
           )}
         </ul>

@@ -8,3 +8,58 @@
 body {
   background-color: #eee;
 }
+
+.modal-header {
+  background: rgba(236, 159, 82, 0.9);
+  align-items: center;
+  .btn-close {
+      background: rgba(0, 0, 0, 0.1);
+      box-sizing: content-box;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 3px;
+      &::before{
+          width: 100%;
+          height: 100%;
+          content: '\2716';
+          color: white;
+          font-size: 20px;
+          line-height: 26px;
+      }
+      &:hover {
+          background: rgba(0, 0, 0, 0.3);
+      }
+  }
+}
+
+.modal-body {
+  textarea {
+    resize: none;
+    overflow-y: auto;
+  }
+}
+
+.modal-footer {
+  padding: 10px 20px;
+  button {
+      background: rgba(0, 0, 0, 0.05);
+      height: 40px;
+      width: 80px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      &:focus {
+          outline: none;
+      }
+  }
+}
+
+button {
+  &:focus {
+      outline: none;
+  }
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}

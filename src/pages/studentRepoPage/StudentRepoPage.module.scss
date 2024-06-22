@@ -1,0 +1,51 @@
+.repo {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 70%;
+    padding: 10px;
+    margin: auto;
+    margin-top: 5%;
+}
+
+.repo__header {
+    padding: 10px 20px 10px 20px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    h1 {
+        margin: 0;
+    }
+}
+
+.tasks__list {
+    list-style: none;
+    padding: 20px 40px;
+    margin: 0;
+    & > li {
+        margin-bottom: 20px;
+    }
+    & > li:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.task {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    text-align: left;
+    .task__header {
+        background: rgba(236, 159, 82, 0.9);
+        display: flex;
+        gap: 10px;
+        height: 60px;
+        padding: 10px 10px 10px 15px;
+        border-radius: 5px 5px 0 0;
+        h2 {
+            flex: 1;
+            margin: 0;
+        }
+    }
+}
+
+.task__content {
+    padding: 10px;
+}

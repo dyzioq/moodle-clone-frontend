@@ -1,8 +1,8 @@
+
 import './TeacherPage.scss';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Form } from 'react-bootstrap';
-// import { Button } from 'react-bootstrap';
+import { Modal, Form, Button } from 'react-bootstrap';
 import Header from '../../components/header/Header';
 
 export default function TeacherPage() {
@@ -13,18 +13,18 @@ export default function TeacherPage() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  async function getAllCourses() {
-    const response = await fetch('https://localhost:7066/api/Courses');
-    const data = await response.json();
-    console.log(data);
-    return data;
-  }
-
-  // async function getCourses(id : number) {
-  //   const response = await fetch('https://localhost:7066/api/courses/id');
+  // async function getAllCourses() {
+  //   const response = await fetch('https://localhost:7066/api/Courses');
   //   const data = await response.json();
+  //   console.log(data);
   //   return data;
   // }
+
+  async function getCourses(id : number) {
+    const response = await fetch('https://localhost:7066/api/courses/id');
+    const data = await response.json();
+    return data;
+  }
 
   async function addCourse(name: string, description: string) {
     const response = await fetch('https://localhost:7066/api/Courses', {
@@ -54,7 +54,7 @@ export default function TeacherPage() {
   return (
     <>
      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton className='modal-add-course__header'>
+        <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -92,9 +92,10 @@ export default function TeacherPage() {
           <button className='courses__add' onClick={handleShow}><p>+</p></button>
         </div>
         <ul className="courses__list">
-          {list.map((el, index) => <li key={index} className='courses__list__li' onClick={() => navigate("/teacher/repo", {state: {index}})}>
-            <div className='courses__list__li__header'>{el.name}</div>
-            <div className='courses__list__li__content'>{el.description}</div>
+          {list.map((el, index) => 
+          <li key={index} className='course' onClick={() => navigate("/teacher/repo", {state: {index}})}>
+            <div className='course__header'><h2>{el.name}</h2></div>
+            <div className='course__content'>{el.description}</div>
           </li>)}
         </ul>
       </div>
