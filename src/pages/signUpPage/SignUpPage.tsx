@@ -7,10 +7,18 @@ import "react-toastify/dist/ReactToastify.css";
 export default function SignUpPage() {
   const navigate = useNavigate();
 
+  const [inputName, setInputName] = useState<string>("");
+  const [inputSurname, setInputSurname] = useState<string>("");
+
   const [inputEmail, setInputEmail] = useState<string>("");
   const [inputPassword, setInputPassword] = useState<string>("");
 
-  async function addUser(email: string, password: string) {
+  async function addUser(
+    name: string,
+    surname: string,
+    email: string,
+    password: string
+  ) {
     try {
       const response = await fetch("https://localhost:7066/register", {
         method: "POST",
@@ -18,6 +26,8 @@ export default function SignUpPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          name: name,
+          surname: surname,
           email: email,
           password: password,
         }),
@@ -42,7 +52,7 @@ export default function SignUpPage() {
     // Dodaj logikę obsługi formularza tutaj
     console.log("Form submitted");
 
-    addUser(inputEmail, inputPassword);
+    addUser(inputName, inputSurname, inputEmail, inputPassword);
     //navigate("/student");
   };
 
@@ -52,16 +62,41 @@ export default function SignUpPage() {
         <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="name">Name</label>
+            <input
+              value={inputName}
+              onChange={(e) => setInputName(e.target.value)}
+              type="text"
+              id="name"
+              name="name"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="surname">Surname</label>
+            <input
+              value={inputSurname}
+              onChange={(e) => setInputSurname(e.target.value)}
+              type="text"
+              id="surname"
+              name="surname"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="email">Email</label>
             <input
               value={inputEmail}
               onChange={(e) => setInputEmail(e.target.value)}
               type="text"
-              id="username"
-              name="username"
+              id="email"
+              name="email"
               required
             />
           </div>
+
           <div>
             <label htmlFor="password">Password</label>
             <input

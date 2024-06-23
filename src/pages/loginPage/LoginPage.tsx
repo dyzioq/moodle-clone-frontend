@@ -42,6 +42,7 @@ export default function LoginPage() {
 
       const result = await response.json();
       console.log("Success:", result);
+
       navigate("/student");
     } catch (error) {
       console.error("Error:", error);
@@ -54,13 +55,13 @@ export default function LoginPage() {
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <input
               value={inputEmail}
               onChange={(e) => setInputEmail(e.target.value)}
               type="text"
-              id="username"
-              name="username"
+              id="email"
+              name="email"
               required
             />
           </div>
@@ -83,6 +84,7 @@ export default function LoginPage() {
       </div>
       <button onClick={() => navigate("/student")}>Student</button>
       <button onClick={() => navigate("/teacher")}>Teacher</button>
+      <button onClick={() => navigate("/admin")}>Admin</button>
       <ToastContainer />
     </>
   );
