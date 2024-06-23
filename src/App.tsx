@@ -8,6 +8,7 @@ import TeacherRepoPage from "./pages/teacherRepoPage/TeacherRepoPage.tsx";
 import StudentRepoPage from "./pages/studentRepoPage/StudentRepoPage.tsx";
 import SignUpPage from "./pages/signUpPage/SignUpPage.tsx";
 import AdminPage from "./pages/adminPage/AdminPage.tsx";
+import ResetPasswordPage from "./pages/resetPasswordPage/ResetPasswordPage.tsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/student/repo" element={<StudentRepoPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/resetPassword" element={<ResetPasswordPage />} />
       </Routes>
     </BrowserRouter>
   );

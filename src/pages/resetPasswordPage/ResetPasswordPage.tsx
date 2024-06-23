@@ -1,12 +1,12 @@
 import { useState } from "react";
-import "./LoginPage.scss";
+import "../loginPage/LoginPage.scss";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Modal, Form, Button } from "react-bootstrap";
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const navigate = useNavigate();
 
   const [inputEmail, setInputEmail] = useState<string>("");
@@ -89,36 +89,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <Modal show={showForgotPassword} onHide={handleCloseForgotPassword}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Role</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>
-                Enter your email - code for reset your password will be send
-              </Form.Label>
-              <input
-                type="text"
-                placeholder="Email"
-                value={inputForgotEmail}
-                onChange={(e) => setForgotEmail(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            ></Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <button onClick={handleCloseForgotPassword}>Close</button>
-          <button onClick={handleForgotPassword}>Submit</button>
-        </Modal.Footer>
-      </Modal>
-
       <div className="login-form">
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>

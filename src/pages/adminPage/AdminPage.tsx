@@ -7,10 +7,8 @@ import { Modal, Form, Button } from "react-bootstrap";
 export default function AdminPage() {
   const navigate = useNavigate();
 
-  const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
 
-  const handleCloseAdd = () => setShowAdd(false);
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = () => setShowEdit(true);
 
