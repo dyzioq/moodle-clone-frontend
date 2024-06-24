@@ -14,8 +14,9 @@ export default function AdminPage() {
 
   async function getUsersList() {
     console.log("scaiagam uzytkownikow");
-    const token = localStorage.getItem("token");
+    var token = localStorage.getItem("token") || "a";
     console.log("tokenadmin" + token);
+    token = token.replace(/['"]+/g, "");
     const response = await fetch(
       "https://localhost:7066/api/User/admin/Users",
       {

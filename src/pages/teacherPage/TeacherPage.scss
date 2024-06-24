@@ -55,17 +55,26 @@
 }
 
 .course__header {
+    display: flex;
+    gap: 10px;
     background: rgba(236, 159, 82, 0.9);
-    overflow: hidden;
-    height: 60px;
-    padding: 10px 15px;
+    padding: 10px 10px 10px 15px;
     border-radius: 5px 5px 0 0;
     h2 {
+        flex: 1;
         margin: 0;
     }
 }
 
-
 .course__content {
     padding: 10px;
+}
+
+.cbtn--course {
+    background: rgba(0, 0, 0, 0.05);
+    width: 80px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    color: white;
 }
