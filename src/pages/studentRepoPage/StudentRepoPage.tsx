@@ -8,6 +8,9 @@ export default function StudentRepoPage() {
   }
   var list = [{title: "Zadanie 1", content: "Jakiś tam content do kursu, opis itp"},{title: "Zadanie 2", content: "Inny opis"},{title: "Zadanie 3", content: "Jeszcze inny opis"},{title: "Zadanie 4", content: "Opis kursu C#"}];
 
+  var token = localStorage.getItem("token") || "a";
+  token = token.replace(/['"]+/g, "");
+
   return (
     <>
       <Header />
