@@ -3,6 +3,7 @@ import "./SignUpPage.scss";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import HeaderLogo from "../../components/header/HeaderLogo";
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function SignUpPage() {
     password: string
   ) {
     try {
-      const response = await fetch("https://localhost:7066/register", {
+      const response = await fetch("https://localhost:7066/api/User/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +51,7 @@ export default function SignUpPage() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Dodaj logikę obsługi formularza tutaj
-    console.log("Form submitted");
+    console.log("sign up Form submitted");
 
     addUser(inputName, inputSurname, inputEmail, inputPassword);
     //navigate("/student");
@@ -58,6 +59,7 @@ export default function SignUpPage() {
 
   return (
     <>
+      <HeaderLogo />
       <div className="login-form">
         <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
