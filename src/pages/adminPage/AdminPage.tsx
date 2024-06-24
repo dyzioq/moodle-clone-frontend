@@ -22,16 +22,34 @@ export default function AdminPage() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
-    //const data = await response.json();
-    console.log(response);
-    return response;
+    const data = await response.json();
+    //console.log(data);
+    //console.log(typeof data);
+
+    // var usersArray = Object.keys(data).map(function (userIndex) {
+    //   let user = data[userIndex];
+    //   // do something with person
+    //   return user;
+    // });
+    // console.log(usersArray);
+    // console.log(typeof usersArray);
+
+    return data;
   }
 
-  const usersList = [getUsersList()];
+  const usersList = getUsersList();
+  usersList.then(function (result) {
+    //console.log(result[1]);
+    return result;
+  });
+  console.log(usersList);
+  // console.log("check");
+  // console.log(usersList);
+  // console.log("objekt :" + typeof usersList);
 
   var list = [
     { name: "Adam", surname: "Kowalksi" },
@@ -98,9 +116,7 @@ export default function AdminPage() {
           {usersList.map((el, index) => (
             <li key={index} className={styles.task}>
               <div className={styles.task__header}>
-                <h2>
-                  {el.name} {el.surname}
-                </h2>
+                <h2>hej</h2>
                 <button
                   className={styles["cbtn--task"]}
                   onClick={handleShowEdit}

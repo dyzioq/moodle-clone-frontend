@@ -39,20 +39,21 @@ export default function LoginPage() {
       }
 
       const result = await response.json();
-      localStorage.setItem("token", JSON.stringify(result["accessToken"]));
+      localStorage.setItem(
+        "token",
+        JSON.stringify(result["accessToken"]).replace(/['"]+/g, "")
+      );
       console.log("token123: " + token);
       console.log("Success:", result);
 
       try {
-        const string1 = inputEmail.replace("@", "%40");
-        console.log(string1);
         const roleResponse = await fetch(
           `https://localhost:7066/api/User/roles?email=${inputEmail}`,
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
