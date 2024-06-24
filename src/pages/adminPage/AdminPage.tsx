@@ -12,6 +12,27 @@ export default function AdminPage() {
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = () => setShowEdit(true);
 
+  async function getUsersList() {
+    console.log("scaiagam uzytkownikow");
+    const token = localStorage.getItem("token");
+    console.log("tokenadmin" + token);
+    const response = await fetch(
+      "https://localhost:7066/api/User/admin/Users",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+    );
+    //const data = await response.json();
+    console.log(response);
+    return response;
+  }
+
+  const usersList = [getUsersList()];
+
   var list = [
     { name: "Adam", surname: "Kowalksi" },
     { name: "Pawel ", surname: "Jakis" },
@@ -73,8 +94,8 @@ export default function AdminPage() {
         <div className={styles.repo__header}>
           <h1>List of Users</h1>
         </div>
-        <ul className={styles.tasks__list}>
-          {list.map((el, index) => (
+        {/* <ul className={styles.tasks__list}>
+          {usersList.map((el, index) => (
             <li key={index} className={styles.task}>
               <div className={styles.task__header}>
                 <h2>
@@ -89,7 +110,7 @@ export default function AdminPage() {
               </div>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </div>
     </>
   );

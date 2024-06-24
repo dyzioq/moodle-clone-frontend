@@ -21,6 +21,7 @@ export default function LoginPage() {
     console.log("login Form submitted");
 
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch("https://localhost:7066/login", {
         method: "POST",
         headers: {
@@ -37,10 +38,56 @@ export default function LoginPage() {
         throw new Error("Network response was not ok");
       }
 
-      // const result = await response.json();
-      // console.log("Success:", result);
+      const result = await response.json();
+      localStorage.setItem("token", JSON.stringify(result["accessToken"]));
+      console.log("token123: " + token);
+      console.log("Success:", result);
 
-      navigate("/student");
+      try {
+        const string1 = inputEmail.replace("@", "%40");
+        console.log(string1);
+        const roleResponse = await fetch(
+          `https://localhost:7066/api/User/roles?email=${inputEmail}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(roleResponse);
+        if (!roleResponse.ok) {
+          toast.error("role is not valid");
+          throw new Error("Network response was not ok");
+        }
+        const roleResult = await roleResponse.json();
+        console.log("Success:", roleResult);
+
+        if (roleResult.length === 0) {
+          navigate("/student");
+        } else {
+          switch (roleResult[0]) {
+            case "Admin":
+              navigate("/admin");
+              break;
+            case "Student":
+              navigate("/student");
+              break;
+            case "Teacher":
+              navigate("/teacher");
+              break;
+            default:
+              console.log("cos nie dziala z rola111");
+              break;
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        console.log("role nie dzialaja");
+      }
+
+      //navigate("/student");
     } catch (error) {
       console.error("Error:", error);
     }
