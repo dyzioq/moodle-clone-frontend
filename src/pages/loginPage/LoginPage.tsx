@@ -197,9 +197,9 @@ export default function LoginPage() {
           Doesn't have an account? Sign Up!
         </a>
       </div>
-      <button onClick={() => navigate("/student")}>Student</button>
+      {/* <button onClick={() => navigate("/student")}>Student</button>
       <button onClick={() => navigate("/teacher")}>Teacher</button>
-      <button onClick={() => navigate("/admin")}>Admin</button>
+      <button onClick={() => navigate("/admin")}>Admin</button> */}
       <ToastContainer />
     </>
   );

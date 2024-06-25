@@ -2,6 +2,7 @@ import './StudentPage.scss';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Modal, Form } from 'react-bootstrap';
+import { ToastContainer, toast } from "react-toastify";
 import Header from '../../components/header/Header';
 
 export default function StudentPage() {
@@ -61,14 +62,31 @@ export default function StudentPage() {
   }
 
   async function joinCourse(courseId : number) {
-    return 'a'
+    try {
+      const response = await fetch(`https://localhost:7066/api/Courses/${courseId}/enroll`, {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+      });
+
+      if (!response.ok) {
+        toast.error("You arleady enrolled to this course");
+        throw new Error('Failed to enroll course');
+      }
+      const data = await response;
+      console.log(data);
+    } catch (error) {
+      console.error('Error enrolling course:', error);
+    }
   }
 
   useEffect(() => {getCourses();}, [token]);
 
   return (
     <>
-          <Modal show={showJoin} onHide={handleCloseJoin}>
+    <ToastContainer />
+      <Modal show={showJoin} onHide={handleCloseJoin}>
         <Modal.Header closeButton>
           <Modal.Title>Join course</Modal.Title>
         </Modal.Header>

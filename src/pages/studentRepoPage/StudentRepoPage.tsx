@@ -2,6 +2,7 @@ import Header from '../../components/header/Header';
 import styles from './StudentRepoPage.module.scss';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
 
 export default function StudentRepoPage() {
   var location = useLocation();
@@ -47,6 +48,7 @@ export default function StudentRepoPage() {
     event.preventDefault();
   
     if (!file) {
+      toast.error("No file selected");
       console.error('No file selected');
       return;
     }
@@ -64,10 +66,12 @@ export default function StudentRepoPage() {
       });
   
       if (!response.ok) {
+        toast.error("Failed to upload file.");
         throw new Error('Failed to upload file');
       }
   
       console.log('File uploaded successfully');
+      toast.success("File uploaded successfully");
       setFileUploaded(true);
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -78,6 +82,7 @@ export default function StudentRepoPage() {
 
   return (
     <>
+      <ToastContainer />
       <Header />
       <div className={styles.repo}>
         <div className={styles.repo__header}>
