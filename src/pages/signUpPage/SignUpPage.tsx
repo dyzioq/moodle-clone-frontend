@@ -126,8 +126,8 @@ export default function SignUpPage() {
           Already have an account? Login!
         </a>
       </div>
-      <button onClick={() => navigate("/student")}>Student</button>
-      <button onClick={() => navigate("/teacher")}>Teacher</button>
+      {/* <button onClick={() => navigate("/student")}>Student</button>
+      <button onClick={() => navigate("/teacher")}>Teacher</button> */}
       <ToastContainer />
     </>
   );

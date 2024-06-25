@@ -3,6 +3,7 @@ import Header from '../../components/header/Header';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Modal, Form } from 'react-bootstrap';
+import { ToastContainer, toast } from "react-toastify";
 
 export default function TeacherRepoPage() {
   const location = useLocation();
@@ -83,6 +84,7 @@ export default function TeacherRepoPage() {
       });
 
       if (!response.ok) {
+        toast.error("Failed to add assignment. Assignment name must be between 3 and 15 characters long, and description must be between 5 and 100 characters long.");
         throw new Error('Failed to add course');
       }
 
@@ -111,6 +113,7 @@ export default function TeacherRepoPage() {
       });
 
       if (!response.ok) {
+        toast.error("Failed to edit assignment. Assignment name must be between 3 and 15 characters long, and description must be between 5 and 100 characters long.");
         throw new Error('Failed to edit course');
       }
 
@@ -328,6 +331,7 @@ export default function TeacherRepoPage() {
         </Modal.Footer>
       </Modal>
 
+      <ToastContainer />
       <Header />
       <div className={styles.repo}>
         <div className={styles.repo__header}>

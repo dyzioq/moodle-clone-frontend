@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Form } from 'react-bootstrap';
 import Header from '../../components/header/Header';
+import { ToastContainer, toast } from "react-toastify";
 
 export default function TeacherPage() {
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ export default function TeacherPage() {
       });
 
       if (!response.ok) {
+        toast.error("Failed to add course. Course name must be between 3 and 15 characters long, and description must be between 5 and 100 characters long.");
         throw new Error('Failed to add course');
       }
 
@@ -93,6 +95,7 @@ export default function TeacherPage() {
       });
 
       if (!response.ok) {
+        toast.error("Failed to edit course. Course name must be between 3 and 15 characters long, and description must be between 5 and 100 characters long.");
         throw new Error('Failed to edit course');
       }
 
@@ -108,12 +111,12 @@ export default function TeacherPage() {
       const response = await fetch(`https://localhost:7066/api/Courses/${id}`, {
         method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
       });
 
       if (!response.ok) {
+        toast.error("Failed to delete course");
         throw new Error('Failed to delete course');
       }
 
@@ -164,6 +167,7 @@ export default function TeacherPage() {
       });
 
       if (!response.ok) {
+        toast.error("Failed to accept student");
         throw new Error('Failed to accept stuent');
       }
       getPendingStudents(courseId);
@@ -292,6 +296,7 @@ export default function TeacherPage() {
         </Modal.Footer>
       </Modal>
 
+      <ToastContainer />
       <Header />
       <div className="courses">
         <div className="courses__header">
@@ -301,8 +306,6 @@ export default function TeacherPage() {
         <ul className="courses__list">
           {list.map((el) => 
           <li key={el.id} className='course'>
-            {/* <div className='course__header'><h2>{el.name}</h2></div>
-            <div className='course__content'>{el.description}</div> */}
             <div className="course__header" onClick={() => navigate("/teacher/repo", {state: {courseId : el.id, courseName : el.name}})}>
               <h2>{el.name}</h2>
               <button className="cbtn--course" onClick={(e) => {e.stopPropagation(); setSelectedCourseId(el.id); handleShowEdit();}}>edit</button>
