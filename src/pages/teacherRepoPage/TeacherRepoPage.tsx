@@ -20,6 +20,7 @@ export default function TeacherRepoPage() {
   const [inputAssignmentDate, setInputAssignmentDate] = useState<Date>(new Date());
 
   const [list, setList] = useState(([{courseId : 0, assignmentId: 0, name: "Zad1", description: "Jakiś tam content do zadania, opis itp", deadline : ''},]));
+  const [fileList, setFileList] = useState([]);
 
   const handleCloseAdd = () => setShowAdd(false);
   const handleCloseEdit = () => setShowEdit(false);
@@ -131,6 +132,38 @@ async function deleteAssignment(courseId: number, assignmentId : number) {
     console.error('Error deleting course:', error);
   }
 }
+
+async function getFiles(courseId : number, assignmentId : number) { 
+  try {
+    const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}/submissions`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to retrieve file');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    var temp : any = [] 
+    data.map((el : any) => {
+      temp.push(el.filePath);
+    });
+    setFileList(temp);
+    console.log('File retrieved successfully ', temp);
+  } catch (error) {
+    console.error('Error retrieving files:', error);
+  }
+}
+
+  // const constructDownloadUrl = (filePath : any) => {
+  //   const baseUrl = 'https://localhost:7066/Files';
+  //   const fileName = filePath.split('\\').pop();
+  //   return `${baseUrl}/${fileName}`;
+  // };
 
   useEffect(() => {getAssignments()}, []);
 
@@ -266,12 +299,13 @@ async function deleteAssignment(courseId: number, assignmentId : number) {
             <div className={styles.task__content}>
               <p>Due Date : {el.deadline.replace('T', ' ')}</p>
               {el.description} 
+              <div className='repo__file'>
+                <button onClick={() => getFiles(courseId, el.assignmentId)}>Show files</button>
+                {fileList.map((el, index) => <a key={index} href={el}>{el}</a>)}
+              </div>
             </div>
           </li>)}
         </ul>
-        <div className='repo__file'>
-          <input type="file" onChange={(event) => handleChangeFile(event)} multiple/>
-        </div>
       </div>
     </>
   )
