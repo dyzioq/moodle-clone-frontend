@@ -1,11 +1,10 @@
 import styles from './TeacherRepoPage.module.scss';
 import Header from '../../components/header/Header';
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Modal, Form } from 'react-bootstrap';
 
 export default function TeacherRepoPage() {
-  const navigate = useNavigate();
   const location = useLocation();
 
   var courseId = location.state.courseId;
@@ -28,6 +27,16 @@ export default function TeacherRepoPage() {
   const handleShowAdd = () => setShowAdd(true);
   const handleShowEdit = () => setShowEdit(true);
   const handleShowDelete = () => setShowDelete(true);
+
+  const [expandedAssignmentId, setExpandedAssignmentId] = useState(null);
+  const toggleFilesVisibility = (assignmentId) => {
+    if (expandedAssignmentId === assignmentId) {
+      setExpandedAssignmentId(null);
+    } else {
+      setExpandedAssignmentId(assignmentId);
+    }
+  };
+
 
   var token = localStorage.getItem("token") || "a";
   token = token.replace(/['"]+/g, "");
@@ -52,118 +61,155 @@ export default function TeacherRepoPage() {
     setList(data);
     console.log(data);
     return data;
-  } catch (error) {
-    console.error('Error fetching courses:', error);
-  }
-}
-
-async function addAssignment(courseId : number, name: string, description: string, deadline : Date) {
-  try {
-    const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        "name": name,
-        "description": description,
-        "deadline": deadline,
-        "courseId": courseId
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to add course');
+    } catch (error) {
+      console.error('Error fetching courses:', error);
     }
-
-    await getAssignments();
-    handleCloseAdd();
-  } catch (error) {
-    console.error('Error adding course:', error);
   }
-}
 
-async function editAssignment(courseId: number, assignmentId : number, name: string, description: string, deadline : Date) {
-  try {
-    const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}`, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        "assignmentId": assignmentId,
-        "name": name,
-        "description": description,
-        "deadline": deadline,
-        "courseId": courseId
-      })
-    });
+  async function addAssignment(courseId : number, name: string, description: string, deadline : Date) {
+    try {
+      const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          "name": name,
+          "description": description,
+          "deadline": deadline,
+          "courseId": courseId
+        })
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to edit course');
+      if (!response.ok) {
+        throw new Error('Failed to add course');
+      }
+
+      await getAssignments();
+      handleCloseAdd();
+    } catch (error) {
+      console.error('Error adding course:', error);
     }
-
-    await getAssignments();
-    handleCloseEdit();
-  } catch (error) {
-    console.error('Error editing course:', error);
   }
-}
 
-async function deleteAssignment(courseId: number, assignmentId : number) {
-  try {
-    const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}`, {
-      method: 'DELETE',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-    });
+  async function editAssignment(courseId: number, assignmentId : number, name: string, description: string, deadline : Date) {
+    try {
+      const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}`, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          "assignmentId": assignmentId,
+          "name": name,
+          "description": description,
+          "deadline": deadline,
+          "courseId": courseId
+        })
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to delete course');
+      if (!response.ok) {
+        throw new Error('Failed to edit course');
+      }
+
+      await getAssignments();
+      handleCloseEdit();
+    } catch (error) {
+      console.error('Error editing course:', error);
     }
-
-    await getAssignments();
-    handleCloseDelete();
-  } catch (error) {
-    console.error('Error deleting course:', error);
   }
-}
 
-async function getFiles(courseId : number, assignmentId : number) { 
-  try {
-    const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}/submissions`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
+  async function deleteAssignment(courseId: number, assignmentId : number) {
+    try {
+      const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to retrieve file');
+      if (!response.ok) {
+        throw new Error('Failed to delete course');
+      }
+
+      await getAssignments();
+      handleCloseDelete();
+    } catch (error) {
+      console.error('Error deleting course:', error);
     }
-
-    const data = await response.json();
-    console.log(data);
-    var temp : any = [] 
-    data.map((el : any) => {
-      temp.push(el.filePath);
-    });
-    setFileList(temp);
-    console.log('File retrieved successfully ', temp);
-  } catch (error) {
-    console.error('Error retrieving files:', error);
   }
-}
 
-  // const constructDownloadUrl = (filePath : any) => {
-  //   const baseUrl = 'https://localhost:7066/Files';
-  //   const fileName = filePath.split('\\').pop();
-  //   return `${baseUrl}/${fileName}`;
-  // };
+  async function getFiles(courseId : number, assignmentId : number) { 
+    try {
+      const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}/submissions`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to retrieve file');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      var temp : any = [] 
+      data.map((el : any) => {
+        temp.push(el.filePath);
+      });
+      setFileList(temp);
+      console.log('File retrieved successfully ', temp);
+    } catch (error) {
+      console.error('Error retrieving files:', error);
+    }
+  }
+
+  async function downloadFile(courseId : any, assignmentId : any, submissionId : any) {
+    try {
+      const response = await fetch(`https://localhost:7066/api/course/${courseId}/assignments/${assignmentId}/submissions/${submissionId}/download`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to retrieve file');
+      }
+  
+      var temp = fileList[submissionId - 1].split('\\');
+      console.log(temp);
+      let fileName = `${temp[temp.length - 4]}_${temp[temp.length - 2]}_${temp[temp.length - 3]}_${temp[temp.length - 1]}`;
+  
+      const disposition = response.headers.get('Content-Disposition');
+      if (disposition && disposition.indexOf('attachment') !== -1) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(disposition);
+        if (matches != null && matches[1]) {
+          fileName = matches[1].replace(/['"]/g, ''); // Extract filename from Content-Disposition header
+        }
+      }
+  
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+  
+      console.log('File downloaded successfully');
+    } catch (error) {
+      console.error('Error retrieving or downloading file:', error);
+    }
+  }
 
   useEffect(() => {getAssignments()}, []);
 
@@ -293,15 +339,29 @@ async function getFiles(courseId : number, assignmentId : number) {
           <li key={index} className={styles.task}>
             <div className={styles.task__header}>
               <h2>{el.name}</h2>
-              <button className="cbtn--course" onClick={(e) => {e.stopPropagation(); setSelectedAssignmentId(el.assignmentId); console.log(selectedAssignmentId); handleShowEdit();}}>edit</button>
+              <button className="cbtn--course" onClick={(e) => {e.stopPropagation(); setSelectedAssignmentId(el.assignmentId); handleShowEdit();}}>edit</button>
               <button className="cbtn--course" onClick={(e) => {e.stopPropagation(); setSelectedAssignmentId(el.assignmentId); handleShowDelete();}}>delete</button>
             </div>
             <div className={styles.task__content}>
               <p>Due Date : {el.deadline.replace('T', ' ')}</p>
               {el.description} 
-              <div className='repo__file'>
-                <button onClick={() => getFiles(courseId, el.assignmentId)}>Show files</button>
-                {fileList.map((el, index) => <a key={index} href={el}>{el}</a>)}
+              <div className={styles.repo__file}>
+                <button className={styles['cbtn--expand']} onClick={() => {toggleFilesVisibility(el.assignmentId); getFiles(courseId, el.assignmentId)}}>Show files</button>
+                {expandedAssignmentId === el.assignmentId && (
+                  fileList.map((elm, index) => {
+                    const temp = elm.split('\\');
+                    const fileName = `${temp[temp.length - 3]}_${temp[temp.length - 1]}`;
+
+                    return (
+                      <a key={index} onClick={(e) => { 
+                        setSelectedAssignmentId(el.assignmentId); 
+                        downloadFile(courseId, selectedAssignmentId, index + 1);
+                      }}>
+                        {fileName}
+                      </a>
+                    );
+                  })
+                )}
               </div>
             </div>
           </li>)}

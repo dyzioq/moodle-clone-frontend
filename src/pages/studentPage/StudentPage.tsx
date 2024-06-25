@@ -61,7 +61,22 @@ export default function StudentPage() {
   }
 
   async function joinCourse(courseId : number) {
-    return 'a'
+    try {
+      const response = await fetch(`https://localhost:7066/api/Courses/${courseId}/enroll`, {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to enroll course');
+      }
+      const data = await response;
+      console.log(data);
+    } catch (error) {
+      console.error('Error enrolling course:', error);
+    }
   }
 
   useEffect(() => {getCourses();}, [token]);
