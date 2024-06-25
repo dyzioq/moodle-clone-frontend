@@ -1,43 +1,102 @@
 import './StudentPage.scss';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { Modal, Form } from 'react-bootstrap';
 import Header from '../../components/header/Header';
 
 export default function StudentPage() {
   const navigate = useNavigate();
   const [list, setList] = useState(([{id: 1, name: "Kurs do języka javascript", description: "Jakiś tam content do kursu, opis itp"},]));
+  const [isAllCourses, setIsAllCourses] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState<number>(0);
 
-  var token = "CfDJ8CvtbO1npDNFkEzFaPFn4rtcZr0SLX0xei8XRlsnGTYL6M-3Oe2LIJWlijPOXvZqIhRiV7EWAFX9jkVnngogBMlIwZqQSHQUgG1KESQxF2KsU-3AW9uUC3migClUwoSwqYdv-hS64DqTYYFq0e0KbcaKAsCez53-n7SJgNLlP64hCPNiK8hFQotz3Qp4fZzcRL3uHb9i5s2b1y3yK66xUJX6g7xjTvMrIcVJ27ov-x1uWrybrVev_FvUdE_u9tg8xPkvDVRtBHoQAqTVItycBclcZgYGQiUW3vhAbMbyBc3IbEQqYoUi052Kahni3sRVA3COINyiYZ1Mv8zH0j9qLxY5LmWUWITgqIaX0rr_ib9bGNKS12tJRyqxoJJqxk44Xc1AhiueG2XDVtEbTvXiH4RG6GE2VBz9bgbmKzuv2-RW1a_Qb81tu6E0ENyOK2gyzIm2uCOAWqYSeo7drSXM-52eOCT6l4IdLi-Op1LeGzlGSkjvaqsXsYoBfruSzbjb7m2rvRAs5_ucEUjNdj-cNDWfx8HagaE91ZCx5Rnr-NQwc8nF-kUeQv8zz81qJ4J1dxNSJrnwqs8M6Xm5L5FOdBmn7dItLKmkHZ1D6kMOdUFkrL4Yg4r0waXc7mkiPfqBiO3v7_8LTdwdLXRpen_y2T11Ng1jgRQUllvFvD4Lj"
+  const [showJoin, setShowJoin] = useState(false);
+
+  const handleCloseJoin = () => setShowJoin(false);
+  const handleShowJoin = () => setShowJoin(true);
 
   var token = localStorage.getItem("token") || "a";
   token = token.replace(/['"]+/g, "");
 
-  async function getCourses() {
-    const response = await fetch('https://localhost:7066/api/User/student/courses', {method: 'GET', 
-      headers: { "Authorization": `Bearer ${token}` }});
-    const data = await response.json();
-    setList(data);
-    return data;
+  async function getAllCourses() {
+    try {
+      const response = await fetch('https://localhost:7066/api/Courses', {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch all courses');
+      }
+      const data = await response.json();
+      setList(data);
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching all courses:', error);
+    }
   }
 
-  // async function getCourses(id : number) {
-  //   const response = await fetch('https://localhost:7066/api/courses/id');
-  //   const data = await response.json();
-  //   return data;
-  // }
+  async function getCourses() {
+    try {
+      const response = await fetch('https://localhost:7066/api/User/student/courses', {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch courses');
+      }
+      const data = await response.json();
+      setList(data);
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  }
 
-  useEffect(() => {getCourses();}, []);
-  useEffect(() => {console.log(list)}, [list]);
+  async function joinCourse(courseId : number) {
+    return 'a'
+  }
+
+  useEffect(() => {getCourses();}, [token]);
 
   return (
     <>
+          <Modal show={showJoin} onHide={handleCloseJoin}>
+        <Modal.Header closeButton>
+          <Modal.Title>Join course</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Label>Send join request to this course?</Form.Label>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button onClick={handleCloseJoin}>
+            Close
+          </button>
+          <button onClick={() => {joinCourse(selectedCourseId); handleCloseJoin();}}>
+            Confirm
+          </button>
+        </Modal.Footer>
+      </Modal>
+
       <Header />
       <div className="courses">
         <div className="courses__header"><h1>Courses</h1></div>
+        <button className="cbtn--change-state" onClick={() => {getAllCourses(); setIsAllCourses(true)}}>Show all courses</button>
+        <button className="cbtn--change-state" onClick={() => {getCourses(); setIsAllCourses(false)}}>Show my courses</button>
         <ul className="courses__list">
+          {isAllCourses ? <h3>Join new courses</h3> : <></>}
           {list.map((el, index) => 
-          <li key={index} className='course' onClick={() => navigate("/student/repo", {state: {index}})}>
-              <div className='course__header'><h2>{el.name}</h2></div>
+          <li key={index} className='course' onClick={() => {!isAllCourses ? navigate("/student/repo", {state: {courseId : el.id, courseName : el.name}}) : <></>}}>
+              <div className='course__header'><h2>{el.name}</h2> {isAllCourses ? <button className="cbtn--course" onClick={(e) => {e.stopPropagation(); setSelectedCourseId(el.id); handleShowJoin();}}>join</button> : <></>}</div>
               <div className='course__content'>{el.description}</div>
             </li>
           )}
