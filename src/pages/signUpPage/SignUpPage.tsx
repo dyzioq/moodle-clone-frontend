@@ -38,6 +38,16 @@ export default function SignUpPage() {
 
       if (!response.ok) {
         toast.error("Email or password is incorrect");
+        toast.error(
+          <div>
+            Rember that the password needs to have:
+            <br /> at least 6 characters
+            <br /> at least 1 uppercase letter
+            <br /> at least 1 lowercase letter
+            <br /> at least 1 number
+            <br /> at least 1 symbol
+          </div>
+        );
       } else {
         navigate("/student");
 
