@@ -19,10 +19,11 @@ export default function AdminPage() {
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
 
+  var token = localStorage.getItem("token") || "a";
+  token = token.replace(/['"]+/g, "");
+
   async function getUsersList() {
     console.log("scaiagam uzytkownikow");
-    var token = localStorage.getItem("token") || "a";
-    token = token.replace(/['"]+/g, "");
     const response = await fetch(
       "https://localhost:7066/api/User/admin/Users",
       {
@@ -41,8 +42,6 @@ export default function AdminPage() {
 
   async function getRole(email: string) {
     try {
-      var token = localStorage.getItem("token") || "a";
-      token = token.replace(/['"]+/g, "");
       const roleResponse = await fetch(
         `https://localhost:7066/api/User/roles?email=${email}`,
         {
@@ -67,12 +66,34 @@ export default function AdminPage() {
   }
 
   async function patchRole(email: string, role: string) {
-    var token = localStorage.getItem("token") || "a";
-    token = token.replace(/['"]+/g, "");
-
     try {
       const response = await fetch("https://localhost:7066/api/User/userRole", {
         method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userEmail: email,
+          roleName: role,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+
+      return result;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function deleteRole(email: string, role: string) {
+    getRole(email);
+    try {
+      const response = await fetch("https://localhost:7066/api/User/userRole", {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -98,6 +119,14 @@ export default function AdminPage() {
     getRole(email);
     handleShowEdit();
     console.log("modal opened");
+  }
+
+  function handleDeleteRole(role: string) {
+    if (role === "Teacher") {
+      deleteRole(userEmail, "Student");
+    } else {
+      deleteRole(userEmail, "Teacher");
+    }
   }
 
   function handleChangeRole(role: string) {
@@ -134,6 +163,7 @@ export default function AdminPage() {
                   className="btn btn-secondary popover-test mr-5 my-1"
                   title="Popover title"
                   onClick={() => {
+                    handleDeleteRole("Student");
                     handleChangeRole("Student");
                   }}
                 >
@@ -146,6 +176,7 @@ export default function AdminPage() {
                   className="btn btn-secondary popover-test my-1"
                   title="Popover title"
                   onClick={() => {
+                    handleDeleteRole("Teacher");
                     handleChangeRole("Teacher");
                   }}
                 >
