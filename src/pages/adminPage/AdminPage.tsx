@@ -13,14 +13,25 @@ export default function AdminPage() {
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = () => setShowEdit(true);
 
+  const [showDelete, setShowDelete] = useState(false);
+
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
+
   const [usersList, setUsersList] = useState([
     { name: "", surname: "", email: "" },
   ]);
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
 
+  var usersRole = "";
+
   var token = localStorage.getItem("token") || "a";
   token = token.replace(/['"]+/g, "");
+
+  async function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   async function getUsersList() {
     console.log("scaiagam uzytkownikow");
@@ -41,6 +52,7 @@ export default function AdminPage() {
   }
 
   async function getRole(email: string) {
+    console.log("start of getRole");
     try {
       const roleResponse = await fetch(
         `https://localhost:7066/api/User/roles?email=${email}`,
@@ -57,7 +69,11 @@ export default function AdminPage() {
         throw new Error("Network response was not ok");
       }
       const roleResult = await roleResponse.json();
+      console.log("setUserRole");
       setUserRole(roleResult);
+      usersRole = roleResult;
+      console.log("rola po pobraniu" + roleResult);
+      console.log("rola po pobraniu" + usersRole);
       return roleResult;
     } catch (error) {
       console.error("Error:", error);
@@ -81,16 +97,20 @@ export default function AdminPage() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const result = await response.json();
+      //const result = await response.json();
 
-      return result;
+      return response;
     } catch (error) {
       console.error("Error:", error);
     }
   }
 
   async function deleteRole(email: string, role: string) {
-    getRole(email);
+    //getRole(email);
+    console.log(email);
+    console.log(role);
+    role = String(role);
+    //await sleep(5000);
     try {
       const response = await fetch("https://localhost:7066/api/User/userRole", {
         method: "DELETE",
@@ -106,27 +126,53 @@ export default function AdminPage() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const result = await response.json();
+      //const result = await response.json();
 
-      return result;
+      return response;
     } catch (error) {
       console.error("Error:", error);
     }
   }
 
   async function showModal(email: string) {
+    console.log("uzyto getRole()");
+
     setUserEmail(email);
     getRole(email);
-    handleShowEdit();
+    await sleep(300);
+    console.log("czy rola to teacher: " + (usersRole == "Teacher"));
+    console.log("email: " + email);
+    console.log("role: " + userRole);
+    console.log("role1: " + usersRole);
+    console.log(typeof usersRole);
+    console.log("czy jest rola: " + (usersRole.length > 0));
+    if (usersRole.length > 0) {
+      handleShowDelete();
+    } else {
+      handleShowEdit();
+    }
+
     console.log("modal opened");
   }
 
-  function handleDeleteRole(role: string) {
-    if (role === "Teacher") {
-      deleteRole(userEmail, "Student");
-    } else {
-      deleteRole(userEmail, "Teacher");
-    }
+  async function handleDeleteRole(role: string) {
+    console.log("przed usunieciem");
+    console.log(userEmail);
+
+    console.log(role);
+    //await sleep(5000);
+    deleteRole(userEmail, role);
+    // if (role == "Teacher") {
+    //   deleteRole(userEmail, "Teacher");
+    // } else {
+    //   deleteRole(userEmail, "Student");
+    // }
+
+    //await sleep(500);
+    //getRole(userEmail);
+    //await sleep(500);
+    //console.log("rola po usunieciu: " + role);
+    handleCloseDelete();
   }
 
   function handleChangeRole(role: string) {
@@ -150,7 +196,7 @@ export default function AdminPage() {
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <p>
-                <Form.Label>Current Role: {userRole}</Form.Label>
+                <Form.Label>Current Role: {usersRole}</Form.Label>
               </p>
               <p>
                 <Form.Label>Select Role</Form.Label>
@@ -158,12 +204,12 @@ export default function AdminPage() {
 
               <p>
                 <a
-                  href=""
+                  //href=""
                   role="button"
                   className="btn btn-secondary popover-test mr-5 my-1"
                   title="Popover title"
                   onClick={() => {
-                    handleDeleteRole("Student");
+                    // handleDeleteRole("Student");
                     handleChangeRole("Student");
                   }}
                 >
@@ -171,12 +217,12 @@ export default function AdminPage() {
                 </a>
 
                 <a
-                  href=""
+                  //href=""
                   role="button"
                   className="btn btn-secondary popover-test my-1"
                   title="Popover title"
                   onClick={() => {
-                    handleDeleteRole("Teacher");
+                    //handleDeleteRole("Teacher");
                     handleChangeRole("Teacher");
                   }}
                 >
@@ -192,6 +238,50 @@ export default function AdminPage() {
         </Modal.Body>
         <Modal.Footer>
           <button onClick={handleCloseEdit}>Close</button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDelete} onHide={handleCloseDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Role</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <p>
+                <Form.Label>Current Role: {userRole}</Form.Label>
+              </p>
+
+              <p>
+                <a
+                  //href=""
+                  role="button"
+                  className="btn btn-secondary popover-test mr-5 my-1"
+                  title="Popover title"
+                  onClick={() => {
+                    // if (usersRole == "Student") {
+                    //   handleDeleteRole("Student");
+                    // } else {
+                    //   handleDeleteRole("Teacher");
+                    // }
+                    console.log(userRole);
+                    handleDeleteRole(userRole);
+
+                    //handleChangeRole("Student");
+                  }}
+                >
+                  Delete Role
+                </a>
+              </p>
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            ></Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button onClick={handleCloseDelete}>Close</button>
         </Modal.Footer>
       </Modal>
 
